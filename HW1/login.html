@@ -27,7 +27,7 @@
     <main>
         <div class="login-container">
             <h1>Login to CryptoHive</h1>
-            <form class="login-form">
+            <form class="login-form" id="loginForm">
                 <div>
                     <label for="email">Email Address</label>
                     <input type="email" id="email" name="email" required placeholder="Enter your email">
@@ -53,6 +53,71 @@
             © 2024 CryptoHive. All rights reserved.
         </div>
     </footer>
+
+    <!-- Firebase Integration -->
+    <script type="module">
+        // Firebase SDK imports
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOoXS6eITby8o6FKKKJgK10yWMEQSnSO4",
+            authDomain: "cryptohive-289bf.firebaseapp.com",
+            databaseURL: "https://cryptohive-289bf-default-rtdb.firebaseio.com",
+            projectId: "cryptohive-289bf",
+            storageBucket: "cryptohive-289bf.appspot.com",
+            messagingSenderId: "397521332560",
+            appId: "1:397521332560:web:3becfd579a4442b384e455"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Handle Login
+        const loginForm = document.getElementById('loginForm');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                // Authenticate the user using Firebase Authentication
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Redirect to the user dashboard
+                alert('Login Successful!');
+                window.location.href = 'userpage.html';
+            } catch (error) {
+                // Handle login errors
+                console.error('Login error:', error);
+                alert('Error during login: ' + error.message);
+            }
+        });
+    </script>
+
+    <!-- Dark Mode Toggle -->
+    <script>
+        const btnTheme = document.getElementById('btnTheme');
+        const body = document.body;
+
+        // Load saved theme from localStorage
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            body.classList.add(currentTheme);
+        }
+
+        // Toggle theme on button click
+        btnTheme.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const theme = body.classList.contains('dark-mode') ? 'dark-mode' : '';
+            localStorage.setItem('theme', theme);
+        });
+    </script>
     <script src="main.js"></script>
 </body>
 </html>
